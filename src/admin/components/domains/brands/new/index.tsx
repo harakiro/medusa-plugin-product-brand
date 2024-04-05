@@ -4,6 +4,7 @@ import {
   ProgressAccordion,
   useToast,
   Toaster,
+  Heading,
 } from "@medusajs/ui";
 import { useAdminCustomPost, useMedusa } from "medusa-react";
 import { useTranslation } from "react-i18next";
@@ -142,22 +143,14 @@ const NewProductBrand = () => {
           </FocusModal.Header>
           <FocusModal.Body className="flex flex-col items-center py-16 overflow-y-auto">
             <div className="h-full w-full px-[20rem]">
-              <ProgressAccordion type="multiple">
-                <ProgressAccordion.Item value={"general"}>
-                  <ProgressAccordion.Header>
-                    {t("new-general-information-title", "General information")}
-                  </ProgressAccordion.Header>
-                  <ProgressAccordion.Content>
-                    <GeneralForm form={nestedForm(form, "general")} />
-                  </ProgressAccordion.Content>
-                </ProgressAccordion.Item>
-                <ProgressAccordion.Item value="Media">
-                  <ProgressAccordion.Header>Media</ProgressAccordion.Header>
-                  <ProgressAccordion.Content>
-                    <MediaForm form={nestedForm(form, "media")} />
-                  </ProgressAccordion.Content>
-                </ProgressAccordion.Item>
-              </ProgressAccordion>
+              <Heading level="h1" className="text-ui-fg-base">
+                {t("new-general-information-title", "General information")}
+              </Heading>
+              <GeneralForm form={nestedForm(form, "general")} />
+              <Heading level="h1" className="text-ui-fg-base">
+                {t("new-media-title", "Media")}
+              </Heading>
+              <MediaForm form={nestedForm(form, "media")} />
             </div>
           </FocusModal.Body>
         </FocusModal.Content>
@@ -185,8 +178,10 @@ const createBlank = () => {
 
 const createPayload = (data): AdminPostProductBrandsReq => {
   const payload: AdminPostProductBrandsReq = {
-    title: data.general.title,
-    handle: data.general.handle || undefined,
+    title: data?.general?.title,
+    handle:
+      data?.general?.handle ||
+      data?.general?.title?.toLowerCase()?.replace(" ", "-"),
   };
   return payload;
 };
