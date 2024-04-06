@@ -44,10 +44,9 @@ const MediaModal = ({ brand }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     let preppedImages: FormImage[] = [];
-    console.log("data", data.media);
+
     try {
       preppedImages = await prepareImages(data.media.images, client);
-      console.log("prep", preppedImages);
       setOpen(false);
     } catch (error) {
       let errorMessage = t(
@@ -74,7 +73,6 @@ const MediaModal = ({ brand }: Props) => {
       return;
     }
     const urls = preppedImages.map((image) => image.url);
-    console.log("urls", urls);
     onUpdate(
       {
         images: urls,

@@ -54,15 +54,12 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
   }, [p, defaultBrandId]);
 
   const handleSave = () => {
-    console.log(selectedBrandId);
     mutate(
       {
         brand: selectedBrandId.value,
       },
       {
-        onSuccess: ({ product }) => {
-          console.log(product);
-        },
+        onSuccess: ({ product }) => {},
         onError: (err) => {
           toast({
             title: "Error",
@@ -74,7 +71,6 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
   };
 
   const handleSearch = (q) => {
-    console.log(q);
     setOffset(0);
     setQuery(q);
   };
