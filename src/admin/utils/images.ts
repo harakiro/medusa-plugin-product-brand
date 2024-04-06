@@ -1,4 +1,4 @@
-import { FormImage } from "../components/forms/media-form";
+import { FormImage } from "../../types/shared";
 
 const splitImages = (
   images: FormImage[]
