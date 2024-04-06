@@ -163,6 +163,10 @@ class ProductBrandService extends TransactionBaseService {
         brand.images = await imageRepo.upsertImages(images as string[]);
       }
 
+      if (isDefined(images) && images.length === 0) {
+        brand.images = await imageRepo.upsertImages([]);
+      }
+
       for (const [key, value] of Object.entries(rest)) {
         if (isDefined(value)) {
           brand[key] = value;
@@ -174,14 +178,16 @@ class ProductBrandService extends TransactionBaseService {
   }
 
   async delete(id: string): Promise<void> {
-    return await this.atomicPhase_(async (manager) => {
-      const productBrandRepo = manager.withRepository(
-        this.productBrandRepository_
-      );
-      const brand = await this.retrieve(id);
-
-      await productBrandRepo.remove([brand]);
-    });
+    try {
+      return await this.atomicPhase_(async (manager) => {
+        const productBrandRepo = manager.withRepository(
+          this.productBrandRepository_
+        );
+        const brand = await productBrandRepo.delete({ id });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
