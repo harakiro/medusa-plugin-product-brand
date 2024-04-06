@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Button, Drawer } from "@medusajs/ui";
-import { useEffect } from "react";
+import { Button, FocusModal, Heading } from "@medusajs/ui";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import GeneralForm, { GeneralFormType } from "../../forms/general-form";
 import { nestedForm } from "../../../utils/nested-form";
@@ -19,6 +19,8 @@ type GeneralFormWrapper = {
 const GeneralModal = ({ brand }: Props) => {
   const { t } = useTranslation();
   const { onUpdate } = useEditProductBrandActions(brand.id);
+  const [open, setOpen] = useState(false);
+
   const form = useForm<GeneralFormWrapper>({
     defaultValues: getDefaultValues(brand),
   });
@@ -38,49 +40,51 @@ const GeneralModal = ({ brand }: Props) => {
   };
 
   const onSubmit = handleSubmit((data) => {
+    setOpen(false);
     onUpdate(
       {
         title: data.general.title,
-        handle: data.general.handle,
+        handle: data.general?.title?.toLowerCase()?.replace(" ", "-"),
       },
       onReset
     );
   });
 
   return (
-    <Drawer>
-      <Drawer.Trigger asChild>
-        <Button variant="secondary" size="base">
-          <PencilSquare />
-          {t(
-            "brand-general-section-edit-general-information",
-            "Edit General Information"
-          )}
-        </Button>
-      </Drawer.Trigger>
-      <Drawer.Content>
-        <Drawer.Header>
-          <Drawer.Title>Edit Brand</Drawer.Title>
-        </Drawer.Header>
-        <Drawer.Body className="p-4">
-          <GeneralForm form={nestedForm(form, "general")} />
-        </Drawer.Body>
-        <Drawer.Footer>
-          <Drawer.Close asChild>
-            <Button variant="secondary">Cancel</Button>
-          </Drawer.Close>
-          <Button
-            size="base"
-            variant="primary"
-            type="submit"
-            onClick={onSubmit}
-            disabled={!isDirty}
-          >
-            {t("brand-general-section-save", "Save")}
+    <>
+      <FocusModal open={open} onOpenChange={setOpen}>
+        <FocusModal.Trigger asChild>
+          <Button variant="secondary" size="base">
+            <PencilSquare />
+            {t(
+              "brand-general-section-edit-general-information",
+              "Edit General Information"
+            )}
           </Button>
-        </Drawer.Footer>
-      </Drawer.Content>
-    </Drawer>
+        </FocusModal.Trigger>
+        <FocusModal.Content>
+          <FocusModal.Header>
+            <Button
+              size="base"
+              variant="primary"
+              type="submit"
+              onClick={onSubmit}
+              disabled={!isDirty}
+            >
+              {t("brand-general-section-save", "Save")}
+            </Button>
+          </FocusModal.Header>
+          <FocusModal.Body className="flex flex-col items-center py-16 overflow-y-auto">
+            <div className="h-full w-full px-[20rem]">
+              <Heading level="h1" className="text-ui-fg-base">
+                {t("edit-brand", "Edit Brand")}
+              </Heading>
+              <GeneralForm form={nestedForm(form, "general")} />
+            </div>
+          </FocusModal.Body>
+        </FocusModal.Content>
+      </FocusModal>
+    </>
   );
 };
 
@@ -88,7 +92,7 @@ const getDefaultValues = (brand: ProductBrand): GeneralFormWrapper => {
   return {
     general: {
       title: brand.title,
-      handle: brand.handle!,
+      handle: brand?.handle,
     },
   };
 };
