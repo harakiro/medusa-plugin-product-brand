@@ -12,11 +12,13 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AdminPostProductBrandsReq } from "../../../../../api/_methods/create-brand";
 import GeneralForm from "../../../forms/general-form";
-import MediaForm, { FormImage } from "../../../forms/media-form";
+import MediaForm from "../../../forms/media-form";
 import { ProductBrand } from "../../../../../models/product-brand";
 import { prepareImages } from "../../../../utils/images";
 import { getErrorMessage } from "../../../../utils/error-message";
 import { nestedForm } from "../../../../utils/nested-form";
+import { useState } from "react";
+import { FormImage } from "../../../../../types/shared";
 
 type AdminProductBrandCreateReq = {
   title: string;
@@ -31,6 +33,7 @@ const NewProductBrand = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { client } = useMedusa();
+  const [open, setOpen] = useState(false);
 
   const form = useForm({
     defaultValues: createBlank(),
@@ -39,9 +42,7 @@ const NewProductBrand = () => {
   const { mutate } = useAdminCustomPost<
     AdminProductBrandCreateReq,
     AdminProductBrandCreateRes
-  >(`/brands`, ["brands", "create"], {
-    product: true,
-  });
+  >(`/brands`, ["brands", "create"]);
 
   const {
     handleSubmit,
@@ -57,6 +58,7 @@ const NewProductBrand = () => {
 
         try {
           preppedImages = await prepareImages(data.media.images, client);
+          setOpen(false);
         } catch (error) {
           let errorMessage = t(
             "new-something-went-wrong-while-trying-to-upload-images",
@@ -131,7 +133,7 @@ const NewProductBrand = () => {
   return (
     <>
       <Toaster />
-      <FocusModal>
+      <FocusModal open={open} onOpenChange={setOpen}>
         <FocusModal.Trigger asChild>
           <Button variant="secondary" size="base" onClick={null}>
             New Brand
