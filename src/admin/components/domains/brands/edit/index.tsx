@@ -41,7 +41,7 @@ const EditProductBrand = () => {
       <Toaster />
       <div className="pb-5xlarge">
         <BackButton
-          path="/a/brands"
+          path="/a/product-brands"
           label="Back to Brands"
           className="mb-xsmall"
         />
