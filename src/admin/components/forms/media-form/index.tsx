@@ -1,23 +1,18 @@
 import clsx from "clsx";
 import { useMemo } from "react";
-import { Button } from "@medusajs/ui";
-import { CheckCircleSolid, Trash } from "@medusajs/icons";
 import {
   Controller,
   FieldArrayWithId,
   useFieldArray,
   useWatch,
 } from "react-hook-form";
-
+import { FormImage } from "../../../../types/shared";
 import { NestedForm } from "../../../utils/nested-form";
 import FileUploadField from "../../atoms/file-upload-field";
 import Actionables, { ActionType } from "../../molecules/actionables";
-export type FormImage = {
-  url: string;
-  name?: string;
-  size?: number;
-  nativeFile?: File;
-};
+import { CheckCircleSolid, Trash } from "@medusajs/icons";
+import { Button } from "@medusajs/ui";
+
 type ImageType = { selected: boolean } & FormImage;
 
 export type MediaFormType = {
