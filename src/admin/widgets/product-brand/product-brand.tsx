@@ -4,7 +4,7 @@ import { useAdminCustomPost, useAdminCustomQuery } from "medusa-react";
 import { Button, Container, Heading, useToast } from "@medusajs/ui";
 import { AdminGetProductBrandsParams } from "../../../api/_methods/list-brands";
 import { AdminProductBrandsListRes } from "../../../types/product-brand";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminPostProductsProductReq } from "../../../api/_methods/update-product";
 import {
   AdminGetProductParams,
@@ -16,11 +16,10 @@ import Select from "react-select";
 
 const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
   const { toast } = useToast();
-
-  const [selectedBrand, setSelectedBrand] = useState("");
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState(undefined);
+  const [selectedBrandId, setSelectedBrandId] = useState(null);
 
   const debouncedSearchTerm = useDebounce(query, 500);
 
@@ -43,16 +42,22 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
     AdminProductsRes & { brand: string }
   >(`/custom-products/${product.id}`, ["custom-products", "list"]);
 
-  console.log("braaaaaaand", p?.product?.brand?.id);
-
+  const defaultBrandId = p?.product?.brand?.id;
   const handleBrandChange = (value) => {
-    setSelectedBrand(value);
+    setSelectedBrandId(value);
   };
 
+  useEffect(() => {
+    if (defaultBrandId) {
+      setSelectedBrandId(defaultBrandId);
+    }
+  }, [p, defaultBrandId]);
+
   const handleSave = () => {
+    console.log(selectedBrandId);
     mutate(
       {
-        brand: selectedBrand as string,
+        brand: selectedBrandId.value,
       },
       {
         onSuccess: ({ product }) => {
@@ -97,9 +102,9 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
                   onChange={handleBrandChange}
                   onInputChange={handleSearch}
                   isSearchable
-                  value={brandOptions.filter(
-                    ({ value }) => value === p?.product?.brand?.id
-                  )}
+                  value={brandOptions.find((op) => {
+                    return op.value === selectedBrandId;
+                  })}
                   placeholder="Select Brand"
                 />
               </div>
