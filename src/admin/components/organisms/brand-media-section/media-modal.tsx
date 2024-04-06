@@ -1,13 +1,14 @@
 import { useToast, Toaster, FocusModal, Button } from "@medusajs/ui";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import MediaForm, { FormImage, MediaFormType } from "../../forms/media-form";
+import MediaForm, { MediaFormType } from "../../forms/media-form";
 import { prepareImages } from "../../../utils/images";
 import { nestedForm } from "../../../utils/nested-form";
 import { useMedusa } from "medusa-react";
 import useEditProductBrandActions from "../../../hooks/use-edit-brand-actions";
 import { ProductBrand } from "../../../../models/product-brand";
+import { FormImage } from "../../../../types/shared";
 
 type Props = {
   brand: ProductBrand;
@@ -25,6 +26,7 @@ const MediaModal = ({ brand }: Props) => {
   const form = useForm<MediaFormWrapper>({
     defaultValues: getDefaultValues(brand),
   });
+  const [open, setOpen] = useState(false);
 
   const {
     formState: { isDirty },
@@ -42,9 +44,11 @@ const MediaModal = ({ brand }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     let preppedImages: FormImage[] = [];
-
+    console.log("data", data.media);
     try {
       preppedImages = await prepareImages(data.media.images, client);
+      console.log("prep", preppedImages);
+      setOpen(false);
     } catch (error) {
       let errorMessage = t(
         "brand-media-section-upload-images-error",
@@ -70,7 +74,7 @@ const MediaModal = ({ brand }: Props) => {
       return;
     }
     const urls = preppedImages.map((image) => image.url);
-
+    console.log("urls", urls);
     onUpdate(
       {
         images: urls,
@@ -82,7 +86,7 @@ const MediaModal = ({ brand }: Props) => {
   return (
     <>
       <Toaster />
-      <FocusModal>
+      <FocusModal open={open} onOpenChange={setOpen}>
         <FocusModal.Trigger asChild>
           <Button variant="secondary" size="base" onClick={null}>
             {t("brand-media-section-edit-media", "Edit Media")}
