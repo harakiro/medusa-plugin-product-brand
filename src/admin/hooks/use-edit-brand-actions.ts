@@ -15,21 +15,15 @@ const useEditProductBrandActions = (brandId: string) => {
     "get",
   ]);
 
-  const UpdateProductBrand = useAdminCustomPost(
-    `/brands/${brandId}`,
-    ["brands", "update"],
-    {
-      product: true,
-    }
-  );
+  const UpdateProductBrand = useAdminCustomPost(`/brands/${brandId}`, [
+    "brands",
+    "update",
+  ]);
 
-  const DeleteProductBrand = useAdminCustomDelete(
-    `/brands/${brandId}`,
-    ["brands", "delete"],
-    {
-      product: true,
-    }
-  );
+  const DeleteProductBrand = useAdminCustomDelete(`/brands/${brandId}`, [
+    "brands",
+    "delete",
+  ]);
 
   const onDelete = async () => {
     const shouldDelete = await dialog({
@@ -44,9 +38,10 @@ const useEditProductBrandActions = (brandId: string) => {
             description: "Brand deleted successfully",
             variant: "success",
           });
-          window.location.href = "/a/brands";
+          window.location.href = "/a/product-brands";
         },
         onError: (err) => {
+          console.log("brrfsf", err);
           notification({
             title: "Error",
             description: getErrorMessage(err),
@@ -62,6 +57,7 @@ const useEditProductBrandActions = (brandId: string) => {
     onSuccess: () => void,
     successMessage = "Brand was successfully updated"
   ) => {
+    console.log("payload", payload);
     UpdateProductBrand.mutate(
       // @ts-ignore TODO fix images being required
       payload,
