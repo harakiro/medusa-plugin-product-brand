@@ -18,7 +18,6 @@ export default async function ListProducts(
   res: MedusaResponse
 ) {
   const productService: ProductService = req.scope.resolve("productService");
-  console.log(req.query, req.listConfig);
   const { skip, take } = req.listConfig;
 
   const [products, count] = await productService.listAndCount(

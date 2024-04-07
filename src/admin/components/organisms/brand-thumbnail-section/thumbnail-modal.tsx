@@ -1,4 +1,3 @@
-import { Product } from "@medusajs/medusa";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -49,7 +48,6 @@ const ThumbnailModal = ({ brand, open, onClose }: Props) => {
 
   const onSubmit = handleSubmit(async (data) => {
     let preppedImages: FormImage[] = [];
-    console.log("data", data);
     try {
       preppedImages = await prepareImages(data.thumbnail.images, client);
     } catch (error) {
@@ -98,7 +96,7 @@ const ThumbnailModal = ({ brand, open, onClose }: Props) => {
             disabled={!isDirty}
             onClick={onSubmit}
           >
-            {t("brand-media-section-save", "Save")}
+            {t("brand-thumbnail-section-save", "Save")}
           </Button>
         </FocusModal.Header>
         <FocusModal.Body className="flex flex-col items-center">

@@ -41,7 +41,6 @@ const useEditProductBrandActions = (brandId: string) => {
           window.location.href = "/a/product-brands";
         },
         onError: (err) => {
-          console.log("brrfsf", err);
           notification({
             title: "Error",
             description: getErrorMessage(err),
@@ -57,7 +56,6 @@ const useEditProductBrandActions = (brandId: string) => {
     onSuccess: () => void,
     successMessage = "Brand was successfully updated"
   ) => {
-    console.log("payload", payload);
     UpdateProductBrand.mutate(
       // @ts-ignore TODO fix images being required
       payload,

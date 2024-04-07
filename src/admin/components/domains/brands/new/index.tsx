@@ -12,7 +12,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AdminPostProductBrandsReq } from "../../../../../api/_methods/create-brand";
 import GeneralForm from "../../../forms/general-form";
-import MediaForm from "../../../forms/media-form";
 import { ProductBrand } from "../../../../../models/product-brand";
 import { prepareImages } from "../../../../utils/images";
 import { getErrorMessage } from "../../../../utils/error-message";
@@ -54,11 +53,12 @@ const NewProductBrand = () => {
   const onSubmit = (publish = true) =>
     handleSubmit(async (data) => {
       const payload = createPayload(data);
-      if (data.media?.images?.length) {
+      if (data.thumbnail?.images?.length) {
         let preppedImages: FormImage[] = [];
 
         try {
-          preppedImages = await prepareImages(data.media.images, client);
+          preppedImages = await prepareImages(data.thumbnail.images, client);
+
           setOpen(false);
         } catch (error) {
           let errorMessage = t(
@@ -151,7 +151,7 @@ const NewProductBrand = () => {
               </Heading>
               <GeneralForm form={nestedForm(form, "general")} />
               <Heading level="h1" className="text-ui-fg-base">
-                {t("new-media-title", "Thumbnail")}
+                {t("new-thumbnail-title", "Thumbnail")}
               </Heading>
               <ThumbnailForm form={nestedForm(form, "thumbnail")} />
             </div>
@@ -169,9 +169,6 @@ const createBlank = () => {
     general: {
       title: "",
       handle: null,
-    },
-    media: {
-      images: [],
     },
     thumbnail: {
       images: [],

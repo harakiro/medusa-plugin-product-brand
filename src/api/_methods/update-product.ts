@@ -16,7 +16,6 @@ export default async function UpdateProduct(
   res: MedusaResponse
 ) {
   const { id } = req.params;
-  console.log("waaaa", req.body);
   registerOverriddenValidators(AdminPostProductsProductReq);
 
   const productService: ProductService = req.scope.resolve("productService");
