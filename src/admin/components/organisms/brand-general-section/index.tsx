@@ -66,15 +66,27 @@ const ProductBrandDetails = ({ brand }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <div className="mt-8 flex flex-col gap-y-3">
-      <h2 className="inter-base-semibold">
-        {t("brand-general-section-details", "Details")}
-      </h2>
-      <Detail
-        title={t("brand-general-section-handle", "Handle")}
-        value={brand.handle}
-      />
-    </div>
+    <>
+      <div className="mt-8 flex flex-col gap-y-3">
+        <h2 className="inter-base-semibold">
+          {t("brand-general-section-details", "Details")}
+        </h2>
+        <Detail
+          title={t("brand-general-section-handle", "Handle")}
+          value={brand.handle}
+        />
+      </div>
+      <div className="mt-8 flex flex-col gap-y-3">
+        <Detail
+          title={t("brand-general-section-metadata", "Metadata")}
+          value={
+            Object.entries(brand.metadata || {}).length > 0
+              ? `${Object.keys(brand.metadata || {}).length}`
+              : undefined
+          }
+        />
+      </div>
+    </>
   );
 };
 
