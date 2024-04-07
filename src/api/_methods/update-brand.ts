@@ -34,11 +34,11 @@ export class AdminPostProductBrandReq {
 
   @IsArray()
   @IsOptional()
-  images?: Image[] | string[];
+  images?: string[];
 
   @IsString()
   @IsOptional()
-  thumbnail?: Image | string;
+  thumbnail?: string;
 
   @IsString()
   @IsOptional()

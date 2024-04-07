@@ -57,15 +57,15 @@ export type FindProductBrandConfig = FindConfig<ProductBrand>;
 
 export type CreateProductBrandInput = {
   title: string;
-  images?: Image[] | string[] | null;
-  thumbnail?: string | Image | null;
+  images?: string[] | null;
+  thumbnail?: string | null;
   handle?: string;
 };
 
 export type UpdateProductBrandInput = {
   title?: string;
-  images?: Image[] | string[] | null;
-  thumbnail?: string | Image | null;
+  images?: string[] | null;
+  thumbnail?: string | null;
   handle?: string;
 };
 

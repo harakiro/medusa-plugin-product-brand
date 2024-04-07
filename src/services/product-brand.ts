@@ -8,7 +8,7 @@ import {
 } from "@medusajs/medusa";
 import ImageRepository from "@medusajs/medusa/dist/repositories/image";
 import { ProductBrand } from "../models/product-brand";
-import { MedusaError, isDefined } from "@medusajs/utils";
+import { MedusaError, isDefined, promiseAll } from "@medusajs/utils";
 import {
   CreateProductBrandInput,
   FindProductBrandConfig,
@@ -122,7 +122,6 @@ class ProductBrandService extends TransactionBaseService {
       const imageRepo = manager.withRepository(this.imageRepository_);
 
       const { images, ...rest } = productBrandObject;
-      images as string[];
 
       if (!rest.thumbnail && images?.length) {
         rest.thumbnail = images[0];
@@ -131,7 +130,7 @@ class ProductBrandService extends TransactionBaseService {
       let brand = productBrandRepo.create(rest);
 
       if (images?.length) {
-        brand.images = await imageRepo.upsertImages(images as string[]);
+        brand.images = await imageRepo.upsertImages(images);
       }
 
       brand = await productBrandRepo.save(brand);
@@ -159,12 +158,16 @@ class ProductBrandService extends TransactionBaseService {
         relations: ["images"],
       });
 
-      if (images?.length) {
-        brand.images = await imageRepo.upsertImages(images as string[]);
+      if (!brand.thumbnail && !brand.thumbnail && images?.length) {
+        brand.thumbnail = images[0];
       }
 
-      if (isDefined(images) && images.length === 0) {
-        brand.images = await imageRepo.upsertImages([]);
+      const promises: Promise<any>[] = [];
+
+      if (images) {
+        promises.push(
+          imageRepo.upsertImages(images).then((image) => (brand.images = image))
+        );
       }
 
       for (const [key, value] of Object.entries(rest)) {
@@ -172,6 +175,8 @@ class ProductBrandService extends TransactionBaseService {
           brand[key] = value;
         }
       }
+
+      await promiseAll(promises);
 
       return await productBrandRepo.save(brand);
     });

@@ -26,10 +26,10 @@ export class ProductBrand extends SoftDeletableEntity {
       referencedColumnName: "id",
     },
   })
-  images: Image[] | string[] | null;
+  images: Image[];
 
   @Column({ type: "text", nullable: true })
-  thumbnail: string | Image | null;
+  thumbnail: string | null;
 
   /**
    * @apiIgnore

@@ -32,11 +32,11 @@ export class AdminPostProductBrandsReq {
 
   @IsArray()
   @IsOptional()
-  images?: Image[] | string[];
+  images?: string[];
 
   @IsString()
   @IsOptional()
-  thumbnail?: Image | string;
+  thumbnail?: string;
 
   @IsString()
   @IsOptional()
