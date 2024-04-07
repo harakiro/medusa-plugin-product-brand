@@ -8,6 +8,7 @@ import {
   Input,
   Heading,
   Toaster,
+  Text,
 } from "@medusajs/ui";
 import { EllipsisHorizontal, Eye, Trash } from "@medusajs/icons";
 import { AdminProductBrandsListRes } from "../../../../../types/product-brand";
@@ -16,6 +17,8 @@ import NewProductBrand from "../new";
 import { useDebounce } from "../../../../hooks/use-debounce";
 import { AdminGetProductBrandsParams } from "../../../../../api/_methods/list-brands";
 import useEditProductBrandActions from "../../../../hooks/use-edit-brand-actions";
+import { ProductBrand } from "../../../../../models/product-brand";
+import { Thumbnail } from "../../../../components/common/thumbnail";
 
 const Overview = () => {
   const navigate = useNavigate();
@@ -118,18 +121,9 @@ const Overview = () => {
                   <Table.Row
                     key={brand.id}
                     className="[&_td:last-child]:w-[1%] [&_td:last-child]:whitespace-nowrap cursor-pointer"
-                    onClick={() => navigate(`${brand.id}`)}
                   >
-                    <Table.Cell>
-                      <div className="flex items-center">
-                        <div className="my-1.5 mr-4 flex h-[40px] w-[30px] items-center">
-                          <img
-                            src={brand.thumbnail as string}
-                            className="rounded-soft h-full object-cover"
-                          />
-                        </div>
-                        {brand?.title}
-                      </div>
+                    <Table.Cell onClick={() => navigate(`${brand.id}`)}>
+                      <ProductBrandTitleCell brand={brand} />
                     </Table.Cell>
                     <Table.Cell>
                       <DropdownMenu>
@@ -151,7 +145,7 @@ const Overview = () => {
                             className="gap-x-2"
                             onClick={async () => {
                               setDeleteId(brand.id);
-                              return onDelete;
+                              onDelete();
                             }}
                           >
                             <Trash className="text-ui-fg-subtle" />
@@ -182,3 +176,17 @@ const Overview = () => {
 };
 
 export default Overview;
+
+export const ProductBrandTitleCell = ({ brand }: { brand: ProductBrand }) => {
+  const thumbnail = brand.thumbnail;
+  const title = brand.title;
+
+  return (
+    <div className="flex items-center gap-x-3">
+      <Thumbnail src={thumbnail} alt={`Thumbnail image of ${title}`} />
+      <Text size="small" className="text-ui-fg-base">
+        {title}
+      </Text>
+    </div>
+  );
+};
