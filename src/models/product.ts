@@ -4,7 +4,7 @@ import { ProductBrand } from "./product-brand";
 
 @Entity()
 export class Product extends MedusaProduct {
-  @ManyToOne(() => ProductBrand)
+  @ManyToOne(() => ProductBrand, (brand) => brand.products)
   @JoinColumn({ name: "brand_id" })
   brand: ProductBrand;
 }

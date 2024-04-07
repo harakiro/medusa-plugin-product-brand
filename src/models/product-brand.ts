@@ -1,10 +1,13 @@
+import { SoftDeletableEntity, generateEntityId, Image } from "@medusajs/medusa";
 import {
-  DbAwareColumn,
-  SoftDeletableEntity,
-  generateEntityId,
-  Image,
-} from "@medusajs/medusa";
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from "typeorm";
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from "typeorm";
+import { Product } from "./product";
 
 @Entity()
 export class ProductBrand extends SoftDeletableEntity {
@@ -13,6 +16,11 @@ export class ProductBrand extends SoftDeletableEntity {
 
   @Column()
   handle: string;
+
+  @OneToMany(() => Product, (product) => product.brand, {
+    cascade: true,
+  })
+  products: Product[];
 
   @ManyToMany(() => Image, (image) => image, { cascade: ["insert"] })
   @JoinTable({

@@ -188,7 +188,7 @@ class ProductBrandService extends TransactionBaseService {
         const productBrandRepo = manager.withRepository(
           this.productBrandRepository_
         );
-        const brand = await productBrandRepo.delete({ id });
+        const brand = await productBrandRepo.softRemove({ id });
       });
     } catch (err) {
       console.log(err);
