@@ -1,4 +1,9 @@
-import { SoftDeletableEntity, generateEntityId, Image } from "@medusajs/medusa";
+import {
+  SoftDeletableEntity,
+  generateEntityId,
+  Image,
+  DbAwareColumn,
+} from "@medusajs/medusa";
 import {
   BeforeInsert,
   Column,
@@ -38,6 +43,9 @@ export class ProductBrand extends SoftDeletableEntity {
 
   @Column({ type: "text", nullable: true })
   thumbnail: string | null;
+
+  @DbAwareColumn({ type: "jsonb", nullable: true })
+  metadata: Record<string, unknown> | null;
 
   /**
    * @apiIgnore

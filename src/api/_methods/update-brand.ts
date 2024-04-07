@@ -1,5 +1,4 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
-import { Image } from "@medusajs/medusa";
 import { IsArray, IsOptional, IsString } from "class-validator";
 import { validator } from "../../utils/validator";
 import ProductBrandService from "../../services/product-brand";
@@ -10,7 +9,6 @@ export default async function UpdateProductBrands(
   res: MedusaResponse
 ) {
   const { id } = req.params;
-
   const validated = await validator(AdminPostProductBrandReq, req.body);
 
   const productBrandService: ProductBrandService = req.scope.resolve(
@@ -43,6 +41,9 @@ export class AdminPostProductBrandReq {
   @IsString()
   @IsOptional()
   handle?: string;
+
+  @IsOptional()
+  metadata?: Record<string, any>;
 }
 
 const defaultAdminProductBrandRelations = ["images"];
@@ -53,6 +54,7 @@ const defaultAdminProductBrandFields: (keyof ProductBrand)[] = [
   "handle",
   "images",
   "thumbnail",
+  "metadata",
   "created_at",
   "updated_at",
   "deleted_at",

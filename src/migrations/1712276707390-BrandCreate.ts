@@ -5,7 +5,7 @@ export class BrandCreate1712276707390 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "product_brand" ("id" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP WITH TIME ZONE, "title" character varying NOT NULL, "handle" character varying NOT NULL, "thumbnail" text, CONSTRAINT "PK_2eb5ce4324613b4b457c364f4a2" PRIMARY KEY ("id"))`
+      `CREATE TABLE "product_brand" ("id" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP WITH TIME ZONE, "title" character varying NOT NULL, "handle" character varying NOT NULL, "thumbnail" text, "metadata" jsonb, CONSTRAINT "PK_2eb5ce4324613b4b457c364f4a2" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "product_brand_images" ("product_brand_id" character varying NOT NULL, "image_id" character varying NOT NULL, CONSTRAINT "PK_63a6f78479308aba43852cf4138" PRIMARY KEY ("product_brand_id", "image_id"))`

@@ -101,6 +101,7 @@ export const defaultAdminProductBrandFields: (keyof ProductBrand)[] = [
   "handle",
   "images",
   "thumbnail",
+  "metadata",
   "created_at",
   "updated_at",
   "deleted_at",

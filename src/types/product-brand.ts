@@ -1,12 +1,10 @@
 import {
   DateComparisonOperator,
-  Product,
-  Image,
   PaginatedResponse,
   Selector,
   FindConfig,
 } from "@medusajs/medusa";
-import { IsEnum, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsOptional, IsString, ValidateNested } from "class-validator";
 import { IsType } from "@medusajs/medusa/dist/utils/validators/is-type";
 import { Type } from "class-transformer";
 import { ProductBrand } from "../models/product-brand";
@@ -67,6 +65,7 @@ export type UpdateProductBrandInput = {
   images?: string[] | null;
   thumbnail?: string | null;
   handle?: string;
+  metadata?: Record<string, any>;
 };
 
 export type AdminProductBrandsListRes = PaginatedResponse & {

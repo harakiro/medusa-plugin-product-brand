@@ -41,6 +41,8 @@ export class AdminPostProductBrandsReq {
   @IsString()
   @IsOptional()
   handle?: string;
+
+  metadata?: Record<string, any>;
 }
 
 const defaultAdminProductBrandRelations = ["images"];
