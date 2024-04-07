@@ -5,6 +5,7 @@ import {
   buildQuery,
   Image,
   isString,
+  EventBusService,
 } from "@medusajs/medusa";
 import ImageRepository from "@medusajs/medusa/dist/repositories/image";
 import { ProductBrand } from "../models/product-brand";
@@ -21,13 +22,21 @@ import ProductBrandRepository from "../repositories/product-brand";
 class ProductBrandService extends TransactionBaseService {
   protected productBrandRepository_: typeof ProductBrandRepository;
   protected readonly imageRepository_: typeof ImageRepository;
+  protected readonly eventBus_: EventBusService;
 
   static readonly IndexName = `product-brand`;
+
+  static readonly Events = {
+    UPDATED: "brand.updated",
+    CREATED: "brand.created",
+    DELETED: "brand.deleted",
+  };
 
   constructor(container) {
     super(container);
     this.productBrandRepository_ = container.productBrandRepository;
     this.imageRepository_ = container.imageRepository;
+    this.eventBus_ = container.eventBusService;
   }
 
   /**
@@ -139,6 +148,11 @@ class ProductBrandService extends TransactionBaseService {
         relations: ["images"],
       });
 
+      await this.eventBus_
+        .withTransaction(manager)
+        .emit(ProductBrandService.Events.CREATED, {
+          id: result.id,
+        });
       return result;
     });
   }
@@ -178,21 +192,45 @@ class ProductBrandService extends TransactionBaseService {
 
       await promiseAll(promises);
 
-      return await productBrandRepo.save(brand);
+      const result = await productBrandRepo.save(brand);
+
+      await this.eventBus_
+        .withTransaction(manager)
+        .emit(ProductBrandService.Events.UPDATED, {
+          id: result.id,
+          fields: Object.keys(data),
+        });
+
+      return result;
     });
   }
 
   async delete(id: string): Promise<void> {
-    try {
-      return await this.atomicPhase_(async (manager) => {
-        const productBrandRepo = manager.withRepository(
-          this.productBrandRepository_
-        );
-        const brand = await productBrandRepo.softRemove({ id });
+    return await this.atomicPhase_(async (manager) => {
+      const brandRepo = manager.withRepository(this.productBrandRepository_);
+
+      // Should not fail, if brand does not exist, since delete is idempotent
+      const brand = await brandRepo.findOne({
+        where: { id: id },
+        relations: {
+          images: true,
+        },
       });
-    } catch (err) {
-      console.log(err);
-    }
+
+      if (!brand) {
+        return;
+      }
+
+      await brandRepo.softRemove({ id });
+
+      await this.eventBus_
+        .withTransaction(manager)
+        .emit(ProductBrandService.Events.DELETED, {
+          id,
+        });
+
+      return Promise.resolve();
+    });
   }
 }
 
