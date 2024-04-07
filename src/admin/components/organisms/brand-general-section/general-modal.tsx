@@ -7,6 +7,11 @@ import { nestedForm } from "../../../utils/nested-form";
 import { PencilSquare } from "@medusajs/icons";
 import { ProductBrand } from "../../../../models/product-brand";
 import useEditProductBrandActions from "../../../hooks/use-edit-brand-actions";
+import MetadataForm, {
+  MetadataFormType,
+  getMetadataFormValues,
+  getSubmittableMetadata,
+} from "../../forms/metadata-form";
 
 type Props = {
   brand: ProductBrand;
@@ -14,6 +19,7 @@ type Props = {
 
 type GeneralFormWrapper = {
   general: GeneralFormType;
+  metadata: MetadataFormType;
 };
 
 const GeneralModal = ({ brand }: Props) => {
@@ -45,6 +51,7 @@ const GeneralModal = ({ brand }: Props) => {
       {
         title: data.general.title,
         handle: data.general?.title?.toLowerCase()?.replace(" ", "-"),
+        metadata: getSubmittableMetadata(data.metadata),
       },
       onReset
     );
@@ -80,6 +87,12 @@ const GeneralModal = ({ brand }: Props) => {
                 {t("edit-brand", "Edit Brand")}
               </Heading>
               <GeneralForm form={nestedForm(form, "general")} />
+              <div className="mt-xlarge">
+                <h2 className="inter-base-semibold mb-base">
+                  {t("product-general-section-metadata", "Metadata")}
+                </h2>
+                <MetadataForm form={nestedForm(form, "metadata")} />
+              </div>
             </div>
           </FocusModal.Body>
         </FocusModal.Content>
@@ -94,6 +107,7 @@ const getDefaultValues = (brand: ProductBrand): GeneralFormWrapper => {
       title: brand.title,
       handle: brand?.handle,
     },
+    metadata: getMetadataFormValues(brand.metadata),
   };
 };
 
