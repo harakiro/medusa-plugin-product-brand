@@ -9,7 +9,12 @@ import {
 } from "@medusajs/medusa";
 import ImageRepository from "@medusajs/medusa/dist/repositories/image";
 import { ProductBrand } from "../models/product-brand";
-import { MedusaError, isDefined, promiseAll } from "@medusajs/utils";
+import {
+  MedusaError,
+  isDefined,
+  promiseAll,
+  setMetadata,
+} from "@medusajs/utils";
 import {
   CreateProductBrandInput,
   FindProductBrandConfig,
@@ -166,7 +171,7 @@ class ProductBrandService extends TransactionBaseService {
         this.productBrandRepository_
       );
       const imageRepo = manager.withRepository(this.imageRepository_);
-      const { images, ...rest } = data;
+      const { metadata, images, ...rest } = data;
 
       const brand = await this.retrieve(id, {
         relations: ["images"],
@@ -182,6 +187,10 @@ class ProductBrandService extends TransactionBaseService {
         promises.push(
           imageRepo.upsertImages(images).then((image) => (brand.images = image))
         );
+      }
+
+      if (metadata) {
+        brand.metadata = setMetadata(brand, metadata);
       }
 
       for (const [key, value] of Object.entries(rest)) {
