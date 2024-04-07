@@ -92,6 +92,13 @@ const Overview = () => {
               </div>
 
               <div className="flex items-center space-x-2">
+                <Button
+                  variant="secondary"
+                  size="base"
+                  onClick={() => (window.location.href = "/a/products")}
+                >
+                  Products
+                </Button>
                 <NewProductBrand />
               </div>
             </div>
