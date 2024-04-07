@@ -19,6 +19,7 @@ import { getErrorMessage } from "../../../../utils/error-message";
 import { nestedForm } from "../../../../utils/nested-form";
 import { useState } from "react";
 import { FormImage } from "../../../../../types/shared";
+import ThumbnailForm from "../../../../components/forms/thumbnail-form";
 
 type AdminProductBrandCreateReq = {
   title: string;
@@ -150,9 +151,9 @@ const NewProductBrand = () => {
               </Heading>
               <GeneralForm form={nestedForm(form, "general")} />
               <Heading level="h1" className="text-ui-fg-base">
-                {t("new-media-title", "Media")}
+                {t("new-media-title", "Thumbnail")}
               </Heading>
-              <MediaForm form={nestedForm(form, "media")} />
+              <ThumbnailForm form={nestedForm(form, "thumbnail")} />
             </div>
           </FocusModal.Body>
         </FocusModal.Content>
