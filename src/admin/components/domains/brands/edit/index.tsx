@@ -5,7 +5,7 @@ import BackButton from "../../../atoms/back-button";
 import ProductBrandGeneralSection from "../../../organisms/brand-general-section";
 import { Toaster } from "@medusajs/ui";
 import useEditProductBrandActions from "../../../../hooks/use-edit-brand-actions";
-import ProductBrandMediaSection from "../../../organisms/brand-media-section";
+import ProductThumbnailSection from "../../../../components/organisms/product-thumbnail-section";
 
 const EditProductBrand = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const EditProductBrand = () => {
               <ProductBrandGeneralSection brand={data.brand} />
             </div>
             <div className="gap-y-xsmall col-span-4 flex flex-col">
-              <ProductBrandMediaSection brand={data.brand} />
+              <ProductThumbnailSection brand={data.brand} />
             </div>
           </div>
         </div>
