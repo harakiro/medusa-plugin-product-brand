@@ -1,6 +1,6 @@
 {
   "name": "medusa-plugin-product-brand",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A product brand plugin for Medusa.",
   "author": "Anouar Kacem (https://github.com/kanrio) <<kcm.anouar@gmail.com>>",
   "license": "MIT",
