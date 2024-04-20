@@ -1,5 +1,5 @@
-import type { MiddlewaresConfig, Product } from "@medusajs/medusa";
-import { AdminGetProductsParams, FindParams } from "@medusajs/medusa";
+import type { MiddlewaresConfig } from "@medusajs/medusa";
+import { FindParams } from "@medusajs/medusa";
 import type {
   MedusaNextFunction,
   MedusaRequest,
@@ -34,30 +34,6 @@ const GetProductBrandMiddleware = (
   })(req, res, next);
 };
 
-const ListProductsMiddleware = async (
-  req: MedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) => {
-  await transformQuery(AdminGetProductsParams, {
-    defaultRelations: defaultAdminProductRelations,
-    defaultFields: defaultAdminProductFields,
-    isList: true,
-  })(req, res, next);
-};
-
-const GetProductMiddleware = (
-  req: MedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) => {
-  transformQuery(FindParams, {
-    defaultRelations: defaultAdminProductRelations,
-    defaultFields: defaultAdminProductFields,
-    isList: false,
-  })(req, res, next);
-};
-
 export const config: MiddlewaresConfig = {
   routes: [
     {
@@ -78,16 +54,6 @@ export const config: MiddlewaresConfig = {
     {
       matcher: "/admin/brands/:id",
       middlewares: [GetProductBrandMiddleware],
-      method: "GET",
-    },
-    {
-      matcher: "/admin/custom-products/:id",
-      middlewares: [GetProductMiddleware],
-      method: "GET",
-    },
-    {
-      matcher: "/admin/custom-products",
-      middlewares: [ListProductsMiddleware],
       method: "GET",
     },
   ],
@@ -130,45 +96,3 @@ export class AdminGetProductBrandsParams {
   @IsOptional()
   order?: string;
 }
-
-export const defaultAdminProductRelations = [
-  "variants",
-  "variants.prices",
-  "variants.options",
-  "profiles",
-  "images",
-  "options",
-  "options.values",
-  "tags",
-  "type",
-  "collection",
-  "brand",
-];
-
-export const defaultAdminProductFields: (keyof Product)[] = [
-  "id",
-  "title",
-  "subtitle",
-  "status",
-  "external_id",
-  "description",
-  "handle",
-  "is_giftcard",
-  "discountable",
-  "thumbnail",
-  "collection_id",
-  "type_id",
-  "weight",
-  "length",
-  "height",
-  "width",
-  "hs_code",
-  "origin_country",
-  "mid_code",
-  "material",
-  "created_at",
-  "updated_at",
-  "deleted_at",
-  "metadata",
-  "brand",
-];
