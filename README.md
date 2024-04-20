@@ -8,8 +8,6 @@ CRUD brands and add them to your products.
 - Available columns: title, handle, thumbnail, metadata
 - Add thumbnail to a Brand
 - Return Brand in store/admin apis
-- For Admin Brand response use GET `/custom-products` with id `/custom-products/${id}`
-- For Admin update product with brand use POST `/custom-products/${id}`
 - Edit/search Brand in product details
 - Add metadata to a brand
 - Create/Update/Delete Brand events
