@@ -2,7 +2,7 @@
   "name": "medusa-plugin-product-brand",
   "version": "0.0.1",
   "description": "A product brand plugin for Medusa.",
-  "author": "Anouar Kacem (https://github.com/anouarkacem) <<kcm.anouar@gmail.com>>",
+  "author": "Anouar Kacem (https://github.com/kanrio) <<kcm.anouar@gmail.com>>",
   "license": "MIT",
   "keywords": [
     "postgres",
