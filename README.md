@@ -14,11 +14,27 @@ CRUD brands and add them to your products.
 
 ---
 
+## Contact
+
+**Email:** `kcm.anouar@gmail.com`
+
+---
+
 ## Prerequisites
 
 - [Medusa backend](https://docs.medusajs.com/development/backend/install)
 
 ---
+
+## Usage
+
+### Installation
+
+```bash
+npm i medusa-plugin-product-brand
+```
+
+### Configuration
 
 1 \. In `medusa-config.js` add the following at the end of the `plugins` array:
 
@@ -35,6 +51,18 @@ const plugins = [
 ```
 
 ---
+
+### Final Step
+
+Build & Run migrations
+
+```bash
+npm run build
+```
+
+```bash
+npx medusa migrations run
+```
 
 ## Test the Plugin
 
