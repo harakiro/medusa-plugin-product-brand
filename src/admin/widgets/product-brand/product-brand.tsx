@@ -1,21 +1,14 @@
 import { ProductDetailsWidgetProps, WidgetConfig } from "@medusajs/admin";
-import { useAdminCustomPost, useAdminCustomQuery } from "medusa-react";
-
-import { Button, Container, Heading, useToast } from "@medusajs/ui";
+import { useAdminCustomQuery, useAdminUpdateProduct } from "medusa-react";
+import { Button, Container, Heading } from "@medusajs/ui";
 import { AdminGetProductBrandsParams } from "../../../api/_methods/list-brands";
 import { AdminProductBrandsListRes } from "../../../types/product-brand";
 import { useEffect, useState } from "react";
-import { AdminPostProductsProductReq } from "../../../api/_methods/update-product";
-import {
-  AdminGetProductParams,
-  AdminProductsRes,
-} from "@medusajs/medusa/dist/api/routes/admin/products";
 import { getErrorMessage } from "../../utils/error-message";
 import { useDebounce } from "../../hooks/use-debounce";
 import Select from "react-select";
 
 const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
-  const { toast } = useToast();
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState(undefined);
@@ -32,39 +25,28 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
     q: debouncedSearchTerm,
   });
 
-  const { mutate } = useAdminCustomPost<
-    AdminPostProductsProductReq,
-    AdminProductsRes
-  >(`/custom-products/${product.id}`, ["products", "update"]);
+  useEffect(() => {
+    if (product?.brand.id) {
+      setSelectedBrandId(product?.brand.id);
+    }
+  }, [product?.brand.id]);
 
-  const { data: p, isLoading: loading } = useAdminCustomQuery<
-    AdminGetProductParams,
-    AdminProductsRes & { brand: string }
-  >(`/custom-products/${product.id}`, ["custom-products", "list"]);
+  const updateProduct = useAdminUpdateProduct(product.id);
 
-  const defaultBrandId = p?.product?.brand?.id;
   const handleBrandChange = (value) => {
     setSelectedBrandId(value);
   };
 
-  useEffect(() => {
-    if (defaultBrandId) {
-      setSelectedBrandId(defaultBrandId);
-    }
-  }, [p, defaultBrandId]);
-
   const handleSave = () => {
-    mutate(
+    updateProduct.mutate(
       {
+        //@ts-ignore
         brand: selectedBrandId.value,
       },
       {
         onSuccess: ({ product }) => {},
         onError: (err) => {
-          toast({
-            title: "Error",
-            description: getErrorMessage(err),
-          });
+          notify.error("Error", getErrorMessage(err));
         },
       }
     );
@@ -76,8 +58,8 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
   };
 
   const brandOptions = (data?.brands || []).map((brand) => ({
-    value: brand.id,
-    label: brand.title,
+    value: brand?.id,
+    label: brand?.title,
   }));
 
   return (
