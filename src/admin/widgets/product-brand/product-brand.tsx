@@ -26,12 +26,12 @@ const ProductBrandWidget = ({ product, notify }: ProductDetailsWidgetProps) => {
   });
 
   useEffect(() => {
-    if (product?.brand.id) {
-      setSelectedBrandId(product?.brand.id);
+    if (product?.brand?.id) {
+      setSelectedBrandId(product?.brand?.id);
     }
-  }, [product?.brand.id]);
+  }, [product?.brand?.id]);
 
-  const updateProduct = useAdminUpdateProduct(product.id);
+  const updateProduct = useAdminUpdateProduct(product?.id);
 
   const handleBrandChange = (value) => {
     setSelectedBrandId(value);
