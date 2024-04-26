@@ -25,8 +25,8 @@ export default async function () {
     "brand",
   ];
 
-  storeProductImports.allowedStoreProductsRelations = [
-    ...storeProductImports.allowedStoreProductsRelations,
+  storeProductImports.allowedStoreProductsFields = [
+    ...storeProductImports.allowedStoreProductsFields,
     "brand",
   ];
 }
